@@ -26,9 +26,9 @@ class ConfigLoader:
                 parser.set('Bot Settings', 'server_id', 'NOT_SET')
                 parser.set('Bot Settings', 'bot_token', 'NOT_SET')
                 parser.set('Bot Settings', 'game_name', 'NOT_SET')
-                parser.set('Bot Settings', 'command_prefix', 'NOT_SET')
+                parser.set('Bot Settings', 'command_prefix', '!')
                 parser.set('Bot Settings', 'description', 'Moderation bot by xperda')
-                parser.set('Bot Settings', 'sqlite', 'modbot.db')
+                parser.set('Bot Settings', 'database', 'modbot.db')
 
                 with open('%s.ini'
                           % (os.path.join(self.path,'config')),
@@ -37,6 +37,10 @@ class ConfigLoader:
                 return True
             return False
 
+    def load_config_setting(self, section, var):
+        """Load a config setting from the ini."""
+        self.parser.read(self.config)
+        return self.parser.get(section, var)
 
 
 
