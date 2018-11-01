@@ -2,20 +2,29 @@ import json
 from discord.ext import commands
 
 
-class Filter:
+chat_filter = ["fuck", "shit"]
 
-    with open('banwords.json') as ban:
-        banned = json.load(ban)
+class Filter:
 
     def __init__(self,bot):
         self.bot = bot
-    #word filter
-        @bot.event
-        async def on_message(message):
-            if any(word in message.content.lower() for word in banned):
-                await bot.delete.message(message)
-                mention = '{0.author.mention}'.format(message)
-                await bot.send_message(message.channel,mention)
+
+    @commands.command()
+    async def banwordlist(ctx):
+        for x in chat_filter:
+         ctx.sendMessage(x)
+
+def check_banwordlist(word):
+    if word in chat_filter:
+        return True
+    else:
+        return False
+
+def deleteMessage():
+    for word in filter.check_banwordlist()
+        if word.upper() in chat_filter:
+
+
 
 def setup(bot):
     bot.add_cog(Filter(bot))
