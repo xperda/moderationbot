@@ -18,3 +18,6 @@ class CommandErrorHandler:
             return await ctx.send(f'{ctx.command} is disabled.')
         elif isinstance(error,commands.BadArgument):
             return await ctx.send('I am sorry, I cannot find this user.')
+
+def setup(bot):
+    bot.add_cog(CommandErrorHandler(bot))

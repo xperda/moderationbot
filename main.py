@@ -6,6 +6,7 @@ from discord.ext import commands
 #util imports
 from utils.config import ConfigLoader
 from utils.database import DatabaseHandler
+from utils.error import CommandErrorHandler
 
 
 ISCONFIG = ConfigLoader().check_for_bot_config()
