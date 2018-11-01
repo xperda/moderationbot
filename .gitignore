@@ -13,3 +13,5 @@ gen
 .idea/workspace.xml
 cogs/__pycache__/
 venv/
+#config
+*.ini

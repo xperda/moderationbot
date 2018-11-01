@@ -18,7 +18,7 @@ class basicCog:
         await self.bot.say("pong")
 
     @commands.command(name="echo",pass_context=True)
-    async def echo(self, ctx, *args):
+    async def echo(self, *args):
         await self.bot.says(*args)
 
     @commands.command(name="clear", pass_context=True)

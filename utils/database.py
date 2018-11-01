@@ -15,10 +15,7 @@ class DatabaseHandler:
 
         self.db = os.path.join(
             self.path,
-            ConfigLoader().load_config_setting(
-                'Bot Settings',
-                'database'
-            )
+            ConfigLoader().load_config_setting('Bot','database')
         )
 
     def connect_db(self):

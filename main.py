@@ -7,10 +7,16 @@ from discord.ext import commands
 from utils.config import ConfigLoader
 from utils.database import DatabaseHandler
 
-PREFIX = ConfigLoader.load_config_setting('Bot Settings','command_prefix')
-DESC = ConfigLoader.load_config_setting('Bot Settings','description')
-TOKEN = ConfigLoader.load_config_setting('Bot Settings','bot_token')
-DATABASE = ConfigLoader.load_config_setting('Bot Settings','database')
+
+ISCONFIG = ConfigLoader().check_for_bot_config()
+if ISCONFIG:
+    print("Cannot find config.ini file, please restart the bot with one.")
+
+
+PREFIX = ConfigLoader().load_config_setting('Bot','command_prefix')
+DESC = ConfigLoader().load_config_setting('Bot','description')
+TOKEN = ConfigLoader().load_config_setting('Bot','bot_token')
+
 
 bot = commands.Bot(command_prefix=PREFIX,description=DESC)
 
