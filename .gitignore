@@ -12,5 +12,4 @@ gen
 .idea/modules.xml
 .idea/workspace.xml
 cogs/__pycache__/
-main.py
 venv/
