@@ -22,7 +22,7 @@ class basicCog:
         await self.bot.says(*args)
 
     @commands.command(name="clear", pass_context=True)
-    @commands.bot_has_permissions
+    @commands.bot_has_permissions()
     async def clear(self, ctx, amount=100):
          channel = ctx.message.channel
          messages = []
