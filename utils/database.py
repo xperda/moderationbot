@@ -26,6 +26,27 @@ class DatabaseHandler:
             print("Connection to database: {0}".format(e))
 
         return
+    #create a database
+    def create_db(self,query):
+        try:
+            db = sqlite3.connect(self.db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+            csr=db.cursor()
+            csr.execute(query)
+            db.commit()
+            db.close()
+        except sqlite3.Error as e:
+            print("Creating database error: {0}".format(e))
+
+    #create tables
+    def create_tables(self,query):
+        try:
+            db = sqlite3.connect(self.db,detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+            csr = db.cursor()
+            csr.execute(query)
+            db.commit()
+            db.close()
+        except sqlite3.Error as e:
+            print("Creating tables error: {0}".format(e))
 
     #get a single result from database
     def get_result(self,query):
