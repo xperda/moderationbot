@@ -1,3 +1,6 @@
+import discord
+import asyncio
+
 from discord.ext import commands
 
 
@@ -19,13 +22,16 @@ class basicCog:
         await self.bot.says(*args)
 
     @commands.command(name="clear", pass_context=True)
+    @commands.bot_has_permissions
     async def clear(self, ctx, amount=100):
-        channel = ctx.message.channel
-        messages = []
-        async for msg in self.bot.logs_from(channel, limit=int(amount) + 1):
+         channel = ctx.message.channel
+         messages = []
+         async for msg in self.bot.logs_from(channel, limit=int(amount)):
             messages.append(msg)
-            await self.bot.delete_messages(messages)
-            await self.bot.say("Messages deleted")
+         await self.bot.delete_messages(messages)
+         await self.bot.say("Messages deleted")
+         await asyncio.sleep(1.2)
+
 
 
 def setup(bot):
