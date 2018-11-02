@@ -3,7 +3,7 @@ import os
 import datetime
 
 from discord.ext import commands
-from utils.database import DatabaseHandler
+from utils.jsonload import DatabaseHandler
 from datetime import datetime
 
 #queries

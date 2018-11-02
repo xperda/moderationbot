@@ -1,12 +1,13 @@
 import discord
-import sqlite3
+import json
+import traceback
 
 from discord.ext import commands
 
 # util imports
 from utils.config import ConfigLoader
-from utils.database import DatabaseHandler
-from utils.error import CommandErrorHandler
+from utils.jsonload import JsonLoader
+
 
 ISCONFIG = ConfigLoader().check_for_bot_config()
 if ISCONFIG:
@@ -57,11 +58,18 @@ async def on_message(message):
 async def on_command_error(self, ctx, error):
     humanerror = (commands.CommandNotFound, commands.UserInputError)
     if isinstance(error, humanerror):
-        return await ctx.send(f'{ctx.command} does not exist.')
+        pass
+    if isinstance(error,commands.errors.CheckFailure):
+        return await ctx.send("{} is not allowed to use this command".format(ctx.message.author.mention))
     elif isinstance(error, commands.DisabledCommand):
-        return await ctx.send(f'{ctx.command} is disabled.')
+        return await ctx.send("{} is disabled.".format(ctx.command))
     elif isinstance(error, commands.BadArgument):
         return await ctx.send('I am sorry, I cannot find this user.')
+    elif isinstance(error,commands.errors.MissingRequiredArgument):
+        formatter = commands.formatter.HelpFormatter()
+        return await ctx.send("{} You are missing required arguments.\n{}"
+             .format(ctx.message.author.mention,formatter.format_help_for(ctx, ctx.command)[0]))
+
 
 
 # main file
