@@ -2,7 +2,6 @@ import json
 from discord.ext import commands
 
 
-chat_filter = ["fuck", "shit"]
 
 class Filter:
 

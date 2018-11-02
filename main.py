@@ -27,7 +27,7 @@ cogs = ['cogs.basic',
         'cogs.filter',
         'cogs.info',
         'cogs.mod',
-        'cogs.usrmgmt']
+        'cogs.moderation']
 
 @bot.event
 async def on_ready():
