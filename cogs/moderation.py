@@ -32,6 +32,22 @@ class Moderation:
 
         await self.bot.send(embed=embed)
 
+    @commands.group(pass_context=True)
+    @commands.has_permissions(mute_members=True)
+    async def mute(self,ctx,user:discord.Member,reason: str = None):
+        if ctx.message.author.server_permissions.administrator:
+            await self.bot.says()
+
+    @commands.command(no_pm=True, pass_context=True)
+    @commands.has_permissions(kick_members=True)
+    async def kick(self,ctx,user:discord.Member,reason: str = None):
+        try:
+            await self.bot.kick(user)
+        except discord.errors.Forbidden:
+            self.bot.says("I cannot do that")
+        except  Exception as e:
+            print(e)
+
 
 
 def addWarnings(self,user_id):
@@ -48,6 +64,7 @@ def deleteWarnings(self,user_id):
 
 def getWarnings(self,user_id):
     return DatabaseHandler().get_result("SELECT warnings FROM users WHERE discordID = {0}".format(user_id))
+
 
 
 def setup(bot):

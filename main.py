@@ -24,7 +24,8 @@ cogs = ['cogs.basic',
         'cogs.filter',
         'cogs.info',
         'cogs.mod',
-        'cogs.moderation']
+        'cogs.moderation',
+        'utils.error']
 
 
 @bot.event
@@ -51,6 +52,17 @@ async def on_member_remove(member):
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
+
+@bot.event
+async def on_command_error(self, ctx, error):
+    humanerror = (commands.CommandNotFound, commands.UserInputError)
+    if isinstance(error, humanerror):
+        return await ctx.send(f'{ctx.command} does not exist.')
+    elif isinstance(error, commands.DisabledCommand):
+        return await ctx.send(f'{ctx.command} is disabled.')
+    elif isinstance(error, commands.BadArgument):
+        return await ctx.send('I am sorry, I cannot find this user.')
+
 
 # main file
 if __name__ == '__main__':
