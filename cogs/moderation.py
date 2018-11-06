@@ -1,69 +1,43 @@
 import discord
-import os
-import datetime
-
 from discord.ext import commands
-from utils.jsonload import DatabaseHandler
-from datetime import datetime
+from discord.ext.commands import CheckFailure
 
-#queries
-getwarn ="SELECT warnings FROM users WHERE discordID = {0}"
-replacewarn = "INSERT OR REPLACE INTO users (discordID, warnings) VALUES (?,?) "
 
 class Moderation:
     def __init__(self,bot):
         self.bot = bot
 
+
     @commands.command(pass_context=True)
-    @commands.has_permissions(ban_members=True)
-    async def warn(self,ctx,user:discord.Member,warning:int,reason):
-        addWarnings(user.id,warning)
-        if int(getWarnings(user.id)) > 4:
-            await self.bot.kick(user)
-        else:
-            pass
-
-
-
-        embed=discord.Embed(title="User has been warned")
-        embed.add_field(name="Member", value="{} ".format(user) + "(<@{}>)".format(user.id), inline=False)
-        embed.add_field(name="Reason", value = "{} ".format(reason))
-        embed.timestamp = datetime.datetime.now()
-
-        await self.bot.send(embed=embed)
-
-    @commands.group(pass_context=True)
-    @commands.has_permissions(mute_members=True)
-    async def mute(self,ctx,user:discord.Member,reason: str = None):
-        if ctx.message.author.server_permissions.administrator:
-            await self.bot.says()
-
-    @commands.command(no_pm=True, pass_context=True)
-    @commands.has_permissions(kick_members=True)
-    async def kick(self,ctx,user:discord.Member,reason: str = None):
+    @commands.has_permissions(administrator=True,kick_members=True)
+    async def kick(self ,user: discord.Member):
         try:
+            msg = "{} was kicked from {}".format(user.display_name,self.bot.server.name)
+            msg += "\nYou can rejoin the server, but please read and respect the rules of the server before rejoining."
             await self.bot.kick(user)
+            await self.bot.send_message(msg)
         except discord.errors.Forbidden:
-            self.bot.says("I cannot do that")
-        except  Exception as e:
-            print(e)
+            self.bot.says("I don't have the permission to do this command")
+        except CheckFailure:
+            self.bot.says("You aren't qualified to use this command")
+
+    @commands.command(pass_context=True)
+    @commands.has_permissions(kick_members=True)
+    async def ban(self, ctx, user: discord.Member):
+            try:
+                try:
+                    member = ctx.message.mentions[0]
+                    msg = "You were banned from the {}.".format(self.bot.server.name)
+                    self.bot.send_message(member, msg)
+                except discord.errors.Forbidden:
+                    pass
+            except discord.errors.Forbidden:
+                self.bot.says("I don't have the permission to do this command")
+            await self.bot.ban(user)
+            await self.bot.says("{} has been banned.".format(self.bot.escape_name(user)))
 
 
 
-def addWarnings(self,user_id):
-    points = int(DatabaseHandler().get_result(getwarn.format(user_id)))
-    points =1
-    DatabaseHandler().insert_into_database(replacewarn,(str(user_id),points))
-
-
-def deleteWarnings(self,user_id):
-    points = int(DatabaseHandler().get_result(getwarn.format(user_id)))
-    points-=1
-    DatabaseHandler().insert_into_database(replacewarn, (str(user_id), points))
-
-
-def getWarnings(self,user_id):
-    return DatabaseHandler().get_result("SELECT warnings FROM users WHERE discordID = {0}".format(user_id))
 
 
 

@@ -1,13 +1,10 @@
 import discord
-import json
 import traceback
 
 from discord.ext import commands
 
 # util imports
 from utils.config import ConfigLoader
-from utils.jsonload import JsonLoader
-
 
 ISCONFIG = ConfigLoader().check_for_bot_config()
 if ISCONFIG:
@@ -24,7 +21,6 @@ bot.remove_command('help')
 cogs = ['cogs.basic',
         'cogs.filter',
         'cogs.info',
-        'cogs.mod',
         'cogs.moderation',
         'utils.error']
 
@@ -33,10 +29,10 @@ cogs = ['cogs.basic',
 async def on_ready():
     print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
 
+
 @bot.event
 async def on_member_join(member):
     userID = member.id
-    server = member.server
 
     embed = discord.Embed(title='Member Left', color=0xFD2F48)
     embed.add_field(name="Member", value="{} ".format(member) + "(<@{}>)".format(userID), inline=True)
@@ -45,31 +41,34 @@ async def on_member_join(member):
 @bot.event
 async def on_member_remove(member):
     userID = member.id
-    server = member.server
 
     embed = discord.Embed(title='Member Left', color=0xFD2F48)
     embed.add_field(name="Member", value="{} ".format(member) + "(<@{}>)".format(userID), inline=True)
+
 
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
 
+
 @bot.event
-async def on_command_error(self, ctx, error):
-    humanerror = (commands.CommandNotFound, commands.UserInputError)
+async def on_command_error(ctx, error):
+
+    humanerror = (commands.errors.CommandNotFound, commands.errors.UserInputError)
+    channel = ctx.message.channel
     if isinstance(error, humanerror):
         pass
-    if isinstance(error,commands.errors.CheckFailure):
-        return await ctx.send("{} is not allowed to use this command".format(ctx.message.author.mention))
-    elif isinstance(error, commands.DisabledCommand):
-        return await ctx.send("{} is disabled.".format(ctx.command))
-    elif isinstance(error, commands.BadArgument):
-        return await ctx.send('I am sorry, I cannot find this user.')
-    elif isinstance(error,commands.errors.MissingRequiredArgument):
+    elif isinstance(error, commands.errors.CheckFailure):
+        await ctx.send("{} is not allowed to use this command".format(ctx.message.author.mention))
+    elif isinstance(error, commands.errors.DisabledCommand):
+        await ctx.send(channel,"{} is disabled.".format(ctx.command))
+    elif isinstance(error, commands.errors.MissingRequiredArgument):
         formatter = commands.formatter.HelpFormatter()
-        return await ctx.send("{} You are missing required arguments.\n{}"
-             .format(ctx.message.author.mention,formatter.format_help_for(ctx, ctx.command)[0]))
-
+        await ctx.send(channel,"{} You are missing required arguments.\n{}"
+                      .format(ctx.message.author.mention, formatter.format_help_for(ctx, ctx.command)[0]))
+    else:
+        tb =  print("Showing debug:\n")
+        traceback.print_exception(type(error), error, error.__traceback__)
 
 
 # main file

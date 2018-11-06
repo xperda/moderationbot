@@ -9,3 +9,6 @@ class JsonLoader:
         with open(path) as items:
             return json.load(items)
 
+    def dumpJson(self,path):
+        with open(path) as items:
+           json.dump(path,items)
