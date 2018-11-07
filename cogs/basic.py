@@ -29,7 +29,7 @@ class basicCog:
          async for msg in self.bot.logs_from(channel, limit=int(amount)):
             messages.append(msg)
          await self.bot.delete_messages(messages)
-         await asyncio.sleep(1.2)
+         await asyncio.sleep(1)
 
 
 

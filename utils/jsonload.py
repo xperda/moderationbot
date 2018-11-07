@@ -1,4 +1,5 @@
 import json
+import os
 
 class JsonLoader:
 
@@ -6,9 +7,9 @@ class JsonLoader:
         pass
 
     def loadJson(self,path):
-        with open(path) as items:
+        with open(path,"r") as items:
             return json.load(items)
 
-    def dumpJson(self,path):
-        with open(path) as items:
-           json.dump(path,items)
+    def dumpJson(self,path,data):
+        with open(path, "w") as items:
+           json.dump(data,items)

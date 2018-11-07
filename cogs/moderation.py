@@ -10,35 +10,40 @@ class Moderation:
 
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True,kick_members=True)
-    async def kick(self ,user: discord.Member):
+    async def kick(self ,ctx,user:discord.Member,reason=""):
+
+        author = ctx.message.author
+
         try:
-            msg = "{} was kicked from {}".format(user.display_name,self.bot.server.name)
+            if reason == "":
+                msg = "You have been kicked from the server"
+            else:
+                msg = "You have been kicked from the server for {}".format("reason")
             msg += "\nYou can rejoin the server, but please read and respect the rules of the server before rejoining."
             await self.bot.kick(user)
-            await self.bot.send_message(msg)
+            await self.bot.send_message(author, msg)
         except discord.errors.Forbidden:
-            self.bot.says("I don't have the permission to do this command")
+            await self.bot.say("I don't have the permission to do this command")
         except CheckFailure:
-            self.bot.says("You aren't qualified to use this command")
+            await self.bot.say("You aren't qualified to use this command")
 
-    @commands.command(pass_context=True)
-    @commands.has_permissions(kick_members=True)
-    async def ban(self, ctx, user: discord.Member):
+        @commands.command(pass_context=True)
+        @commands.has_permissions(administrator=True, ban_members=True)
+        async def ban(self, ctx, user: discord.Member, reason=""):
+
+            author = ctx.message.author
+
             try:
-                try:
-                    member = ctx.message.mentions[0]
-                    msg = "You were banned from the {}.".format(self.bot.server.name)
-                    self.bot.send_message(member, msg)
-                except discord.errors.Forbidden:
-                    pass
+                if reason == "":
+                    msg = "You have been banned from the server"
+                else:
+                    msg = "You have been banned from the server for {}".format("reason")
+                await self.bot.ban(user)
+                await self.bot.send_message(author, msg)
             except discord.errors.Forbidden:
-                self.bot.says("I don't have the permission to do this command")
-            await self.bot.ban(user)
-            await self.bot.says("{} has been banned.".format(self.bot.escape_name(user)))
-
-
-
-
+                await self.bot.say("I don't have the permission to do this command")
+            except CheckFailure:
+                await self.bot.say("You aren't qualified to use this command")
 
 
 def setup(bot):
