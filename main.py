@@ -15,6 +15,7 @@ if ISCONFIG:
 PREFIX = ConfigLoader().load_config_setting('Bot', 'command_prefix')
 DESC = ConfigLoader().load_config_setting('Bot', 'description')
 TOKEN = ConfigLoader().load_config_setting('Bot', 'bot_token')
+JSON = JsonLoader().checkJson()
 
 bot = commands.Bot(command_prefix=PREFIX, description=DESC)
 
@@ -26,17 +27,21 @@ cogs = ['cogs.basic',
         'cogs.moderation',
         'utils.error']
 
+filepath = ["bans.json"]
+
 
 @bot.event
 async def on_ready():
     print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
+
+
 
 @bot.event
 async def on_message(message):
 
     await bot.process_commands(message)
 
-
+'''
 @bot.event
 async def on_command_error(ctx, error):
 
@@ -51,10 +56,7 @@ async def on_command_error(ctx, error):
         formatter = commands.formatter.HelpFormatter()
         await bot.say("{} You are missing required arguments.\n{}"
                       .format(ctx.message.author.mention, formatter.format_help_for(ctx, ctx.command)[0]))
-    else:
-        tb =  print("Showing debug:\n")
-        traceback.print_exc()
-
+'''
 # module needed to run a python file
 if __name__ == '__main__':
     for c in cogs:

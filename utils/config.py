@@ -25,7 +25,6 @@ class ConfigLoader:
             parser.set('Bot', 'bot_token', '')
             parser.set('Bot', 'command_prefix', '!')
             parser.set('Bot', 'description', 'Moderation bot by xperda')
-            parser.set('Bot', 'database', 'modbot.db')
             with open('%s.ini' % (os.path.join(self.path,'config')),
                         'w') as configfile:
                         parser.write(configfile)
