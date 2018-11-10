@@ -22,6 +22,7 @@ class basicCog:
         embed.add_field(name="Modbot Ping",value="Ping - {} ms".format(pong))
         await self.bot.say(embed=embed)
         await self.bot.say(pong)
+
     @commands.command(name="echo",pass_context=True)
     async def echo(self, *args):
         await self.bot.says(*args)

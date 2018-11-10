@@ -4,6 +4,8 @@ from discord.ext import commands
 from discord.ext.commands import CheckFailure
 
 
+chat_filter = ["FUCK","SHIT","DAMN"]
+
 class Moderation:
     def __init__(self,bot):
         self.bot = bot
@@ -54,6 +56,18 @@ class Moderation:
             messages.append(msg)
         await asyncio.sleep(1)
         await self.bot.delete_messages(messages)
+
+
+    #profanity filter
+    async def on_message(self,message):
+        sentence = message.content.split(" ")
+        for word in sentence:
+            if word.upper() in chat_filter:
+                try:
+                    await self.bot.delete_message(message)
+                    await self.bot.say("You aren't allowed to say that in here!")
+                except discord.errors.NotFound:
+                    return
 
 
 def setup(bot):
