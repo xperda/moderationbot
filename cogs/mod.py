@@ -49,11 +49,9 @@ class Moderation:
 
     @commands.command(pass_context=True)
     async def banlist(self,ctx):
-        server = ctx.message.author.server
-        server_id = server.id
-        banendUsers = await self.bot.get_bans(server_id)
+        banendUsers = await self.bot.get_bans(ctx.message.server)
         for user in banendUsers:
-            await self.bot.say(user.name+":"+user.id)
+            await self.bot.say("{}".format(user.name + " : " + user.id))
 
 
     #profanity filter
