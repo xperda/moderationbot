@@ -21,12 +21,18 @@ class basicCog:
         embed = discord.Embed(color=discord.Colour(0x3498db))
         embed.add_field(name="Modbot Ping",value="Ping - {} ms".format(pong))
         await self.bot.say(embed=embed)
-        await self.bot.say(pong)
 
     @commands.command(name="echo",pass_context=True)
     async def echo(self, *args):
         await self.bot.says(*args)
 
+    @commands.command(name="clear", pass_context=True)
+    async def clear(self, ctx, amount):
+        channel = ctx.message.channel
+        messages = []
+        async for msg in self.bot.logs_from(channel, limit=int(amount)):
+            messages.append(msg)
+        await self.bot.delete_messages(messages)
 
 
 
