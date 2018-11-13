@@ -2,43 +2,34 @@ import discord
 import time
 from discord.ext import commands
 
-class Info:
 
+class InfoCog:
 
-
-    def __init__(self,bot):
+    def __init__(self, bot):
         self.bot = bot
 
-
     @commands.command(pass_context=True)
-    async def help(self,ctx):
-        embed = discord.Embed(
-            title="Command List",
-            color=discord.Colour.red()
-        )
+    async def help(self, ctx):
 
-        embed.add_field(name="ping", value="ping - Returns a pong")
-        embed.add_field(name="echo", value="echo - Echoes what you typed ")
-        embed.add_field(name="kick", value="kick - Kick someone from the server")
-        embed.add_field(name="ban", value="ban - Ban someone from the server")
-        embed.add_field(name="banlist", value='banlist - Shows a list of banned users')
+        aboutembed = discord.Embed(color=discord.Colour.blue())
+        commandembed = discord.Embed(title="**__Command List__**", color=discord.Colour.blue())
 
-        await self.bot.send_message(ctx.message.channel,embed=embed)
+        greeting = "Hello, I am {}".format(self.bot.user.name)
+        desc = "My existence is to assist you in managing your server, I can help you to censor, kick and ban anyone " \
+               "you don't like. It doesn't matter if you want to be a rule your server democratically or with an iron " \
+               "fist. I am always here to help you in your regime."
 
-    @commands.command(pass_context=True)
-    async def userinfo(self,ctx,user:discord.Member):
-        channel = ctx.message.channel
-        if user == None:
-            user=ctx.author
+        aboutembed.add_field(name=greeting, value=desc)
 
-        profile = discord.Embed
-        profile.add_field(name="Created on",value=user.created_at)
-        profile.add_field(name="Joined server on", value=user.joined_at)
-        profile.add_field(name="Roles",value=user.roles,inline=False)
-        profile.set_footer(text="User ID:{}".format(user.id))
+        commandembed.add_field(name="ping", value="ping - Returns a pong", inline=True)
+        commandembed.add_field(name="echo", value="echo - Echoes what you typed ", inline=True)
+        commandembed.add_field(name="kick", value="kick - Kick someone from the server", inline=True)
+        commandembed.add_field(name="ban", value="ban - Ban someone from the server", inline=True)
+        commandembed.add_field(name="banlist", value='banlist - Shows a list of banned users', inline=True)
 
-        await self.bot.send_message(channel,embed=profile)
+        await self.bot.send_message(ctx.message.channel, embed=aboutembed)
+        await self.bot.send_message(ctx.message.channel, embed=commandembed)
 
 
 def setup(bot):
-    bot.add_cog(Info(bot))
+    bot.add_cog(InfoCog(bot))

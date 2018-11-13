@@ -13,7 +13,7 @@ class ConfigLoader:
 
 
 
-    #config example from https://github.com/snoringninja/niftybot-discord/blob/master/resources/config.pyk
+    #config from https://github.com/snoringninja/niftybot-discord/blob/master/resources/config.pyk
     def check_for_bot_config(self):
         if not self.config:
             print("Generating ini file...")
@@ -37,6 +37,10 @@ class ConfigLoader:
         self.parser.read(self.config)
         return self.parser.get(section,var)
 
+    def edit_config(self,var,var2):
+        self.parser.set('Bot',var,var2)
+        with open('config.ini','wb') as configfile:
+            self.parser.write(configfile)
 
 
 

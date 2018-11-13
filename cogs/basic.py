@@ -4,7 +4,7 @@ import time
 from discord.ext import commands
 
 
-class basicCog:
+class BasicCog:
 
     def __init__(self, bot):
         self.bot = bot
@@ -23,8 +23,8 @@ class basicCog:
         await self.bot.say(embed=embed)
 
     @commands.command(name="echo",pass_context=True)
-    async def echo(self, *args):
-        await self.bot.says(*args)
+    async def echo(self, ctx, *args):
+        await self.bot.send_message(ctx.message.channel,*args)
 
     @commands.command(name="clear", pass_context=True)
     async def clear(self, ctx, amount):
@@ -35,6 +35,5 @@ class basicCog:
         await self.bot.delete_messages(messages)
 
 
-
 def setup(bot):
-    bot.add_cog(basicCog(bot))
+    bot.add_cog(BasicCog(bot))
