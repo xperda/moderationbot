@@ -15,6 +15,7 @@ if ISCONFIG:
 PREFIX = ConfigLoader().load_config_setting('Bot', 'command_prefix')
 DESC = ConfigLoader().load_config_setting('Bot', 'description')
 TOKEN = ConfigLoader().load_config_setting('Bot', 'bot_token')
+JSON = JsonLoader().checkJson()
 
 
 bot = commands.Bot(command_prefix=PREFIX, description=DESC)
@@ -27,7 +28,7 @@ cogs = ['cogs.basic',
         'cogs.filter',
         'cogs.info',
         'cogs.mod',
-        'cogs.warn']
+        'cogs.warning']
 
 
 @bot.event

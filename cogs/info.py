@@ -30,6 +30,16 @@ class InfoCog:
         await self.bot.send_message(ctx.message.channel, embed=aboutembed)
         await self.bot.send_message(ctx.message.channel, embed=commandembed)
 
+    @commands.command(pass_context=True)
+    async def whois(self,ctx,user:discord.Member):
+
+        profile = discord.Embed(title=user.name,color=discord.Colour.blue())
+        profile.set_thumbnail(url=user.avatar_url)
+        profile.add_field(name="ID",value=user.id,inline=False)
+        profile.add_field(name="Date Joined", value=user.joined_at)
+
+        await self.bot.send_message(ctx.message.channel,embed=profile)
+
 
 def setup(bot):
     bot.add_cog(InfoCog(bot))

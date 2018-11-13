@@ -51,7 +51,6 @@ class FilterCog:
     # main filters
     async def on_message(self, message):
         sentence = message.content.split(" ")
-        print(str(self.status))
         for word in sentence:
             if word.upper() in blacklist and self.status:
                 try:
