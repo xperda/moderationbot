@@ -1,8 +1,9 @@
 import discord
+import cogs.warning
 import re
 
 from discord.ext import commands
-from utils.jsonload import JsonLoader
+
 
 blacklist = ["FUCK","SHIT","DAMN"]
 
@@ -54,7 +55,7 @@ class FilterCog:
         for word in sentence:
             if word.upper() in blacklist and self.status:
                 try:
-                    await self.bot.purge_message(message)
+                    await self.bot.delete_message(message)
                     await self.bot.send_message("You aren't allowed to say that in here!")
                 except discord.errors.NotFound:
                     return

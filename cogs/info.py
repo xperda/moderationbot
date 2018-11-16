@@ -13,6 +13,10 @@ class InfoCog:
 
         aboutembed = discord.Embed(color=discord.Colour.blue())
         commandembed = discord.Embed(title="**__Command List__**", color=discord.Colour.blue())
+        modembed = discord.Embed(title="**__Mod Commands__**", color=discord.Colour.blue())
+        warnembed = discord.Embed( title="**__Warn Commands__**", color=discord.Colour.blue() )
+        filterembed = discord.Embed( title="**__Filter Commands__**", color=discord.Colour.blue() )
+
 
         greeting = "Hello, I am {}".format(self.bot.user.name)
         desc = "My existence is to assist you in managing your server, I can help you to censor, kick and ban anyone " \
@@ -21,14 +25,22 @@ class InfoCog:
 
         aboutembed.add_field(name=greeting, value=desc)
 
-        commandembed.add_field(name="ping", value="ping - Returns a pong", inline=True)
-        commandembed.add_field(name="echo", value="echo - Echoes what you typed ", inline=True)
-        commandembed.add_field(name="kick", value="kick - Kick someone from the server", inline=True)
-        commandembed.add_field(name="ban", value="ban - Ban someone from the server", inline=True)
-        commandembed.add_field(name="banlist", value='banlist - Shows a list of banned users', inline=True)
-
+        commandembed.add_field(name="ping", value="Returns a pong", inline=True)
+        commandembed.add_field(name="echo", value="Echoes what you typed ", inline=True)
+        modembed.add_field(name="kick", value="Kick someone from the server", inline=True)
+        modembed.add_field(name="ban", value="Ban someone from the server", inline=True)
+        modembed.add_field(name="banlist", value='Shows a list of banned users', inline=True)
+        warnembed.add_field( name="warn", value='Adds a warning to the user', inline=True )
+        warnembed.add_field( name="unwarn", value='Removes a warning from the user', inline=True )
+        warnembed.add_field( name="warnings", value='Displays user current warnings', inline=True )
+        filterembed.add_field( name="filter", value='Turns filter on or off', inline=True )
+        filterembed.add_field( name="filterstatus", value='Displays filter current status', inline=True )
+        filterembed.add_field( name="blacklist", value='Shows a list of banned words on the server', inline=True )
         await self.bot.send_message(ctx.message.channel, embed=aboutembed)
         await self.bot.send_message(ctx.message.channel, embed=commandembed)
+        await self.bot.send_message( ctx.message.channel, embed=modembed)
+        await self.bot.send_message( ctx.message.channel, embed=warnembed)
+        await self.bot.send_message( ctx.message.channel, embed=filterembed)
 
     @commands.command(pass_context=True)
     async def whois(self,ctx,user:discord.Member):

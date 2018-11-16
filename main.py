@@ -1,12 +1,12 @@
 import discord
-import asyncio
+import logging
 import traceback
 
 from discord.ext import commands
 
 # util imports
 from utils.config import ConfigLoader
-from utils.jsonload import JsonLoader
+from utils.database import DatabaseHandler
 
 ISCONFIG = ConfigLoader().check_for_bot_config()
 if ISCONFIG:
@@ -15,12 +15,20 @@ if ISCONFIG:
 PREFIX = ConfigLoader().load_config_setting('Bot', 'command_prefix')
 DESC = ConfigLoader().load_config_setting('Bot', 'description')
 TOKEN = ConfigLoader().load_config_setting('Bot', 'bot_token')
-JSON = JsonLoader().checkJson()
+DATABASE = DatabaseHandler().check_db_file()
 
 
 bot = commands.Bot(command_prefix=PREFIX, description=DESC)
 #To remove the default help command
 bot.remove_command('help')
+
+
+# Setup logger
+logger = logging.getLogger('discord')
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('@%(name)s [%(levelname)s] %(asctime)s: %(message)s'))
+logger.addHandler(handler)
 
 
 
