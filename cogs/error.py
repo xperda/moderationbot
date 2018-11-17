@@ -16,7 +16,7 @@ class ErrorCog:
         Modification from https://gist.github.com/Vexs/daa1dcc92ff80fad7ca020d0f7bb4f75
 
         '''
-        if hasattr(ctx.command,'on_eror'):
+        if hasattr(ctx.command,'on_error'):
             return
 
         channel = ctx.message.channel

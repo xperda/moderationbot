@@ -1,9 +1,9 @@
 import discord
-import time
-import cogs.warning
+import asyncio
 import re
 
 from discord.ext import commands
+from utils.database import DatabaseHandler
 
 
 blacklist = ["FUCK","SHIT","DAMN"]
@@ -19,8 +19,11 @@ class CensorCog:
         self.status = False
         self.mentioned = 0
 
+
     async def on_message(self, message):
-        await self.censor_message(message)
+        if not message.author.server_permissions.administrator:
+           await self.track_mention(message)
+           await self.censor_message(message)
 
 
     @commands.command(pass_context=True)
@@ -60,9 +63,6 @@ class CensorCog:
 
     async def censor_message(self,message:discord.Message):
 
-        if message.author.server_permissions.administrator:
-            return
-
         await self.track_mention(message)
 
         sentence = message.content.split( " " )
@@ -71,19 +71,26 @@ class CensorCog:
                 try:
                     await self.bot.delete_message( message )
                     await self.bot.send_message(message.channel, "You aren't allowed to say that in here!" )
-                except discord.errors.NotFound:
                     return
+                except discord.errors.NotFound:
+                    pass
 
     async def track_mention(self,message:discord.Message):
         if "@" in message.content and not self.mentioned >4:
             self.mentioned += 1
         else:
-            await self.bot.send_message( message.channel, "Stop mention spamming!" )
-            await self.bot.purge_from(message.channel,limit=30,check=lambda message: message.author.id)
             self.mentioned = 0
+            await self.bot.send_message( message.channel, "Stop mention spamming! You have been warned" )
+            asyncio.sleep(1)
+            await self.bot.purge_from(message.channel,limit=30,check=lambda message: message.author.id)
+            await self.warn_user(message.author.id)
+
             return
 
-        print(self.mentioned)
+    async def warn_user(self,user_id):
+        count = DatabaseHandler().get_single_row_db(str(user_id))
+        count+=1
+        DatabaseHandler().update_db(count,user_id)
 
 
 

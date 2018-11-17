@@ -23,24 +23,26 @@ class DatabaseHandler:
         connection.execute("CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, username TEXT, warnings INTEGER)")
 
 
-    def get_single_row_db(self,query):
+    def get_single_row_db(self,user_id):
         try:
             db = sqlite3.connect(filepath + filename + ".db")
-            executed =db.cursor().execute( query )
+            cr = db.cursor()
+            executed =cr.execute(f'SELECT warnings FROM users WHERE id = {user_id}')
             row = executed.fetchone()
             return row[0]
         except sqlite3.Error as e:
             print("select error: {}".format(e))
 
 
-    def get_all_rows_db(self,query):
+    def get_all_rows_db(self):
+        query = 'SELECT warnings FROM users'
         try:
             db = sqlite3.connect(filepath + filename + ".db")
             executed =db.cursor().execute( query )
             rows = executed.fetchall()
             return rows
         except sqlite3.Error as e:
-            print("select error: {}".format(e))
+            print("select all error: {}".format(e))
 
 
     def insert_into_db(self,query,data):
@@ -54,18 +56,9 @@ class DatabaseHandler:
         except sqlite3.Error as e:
             print( "insert into error: {}".format(e))
 
-    def update_db(self, query, arg):
-        try:
-            db = sqlite3.connect( filepath + filename + ".db" )
-            cr = db.cursor()
-            row = cr.execute( query, arg )
-            db.commit()
-            new_row = row.fetchone()
-            return new_row
-        except sqlite3.Error as e:
-            print( "update error: {}".format( e ) )
 
-    def update_db_no_args(self,query):
+    def update_db(self,arg,user_id):
+        query = f'UPDATE users SET warnings = {arg} WHERE id = {user_id}'
         try:
             db = sqlite3.connect(filepath + filename + ".db")
             cr = db.cursor()
@@ -73,6 +66,16 @@ class DatabaseHandler:
             db.commit()
         except sqlite3.Error as e:
             print("delete error: {}".format(e))
+
+    def delete_row_db(self,user_id):
+        query = f"DELETE FROM users where id = {user_id}"
+        try:
+            db = sqlite3.connect( filepath + filename + ".db" )
+            cr = db.cursor()
+            cr.execute( query )
+            db.commit()
+        except sqlite3.Error as e:
+            print( "delete error: {}".format( e ) )
 
 
 
