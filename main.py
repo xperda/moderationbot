@@ -19,8 +19,8 @@ DATABASE = DatabaseHandler().check_db_file()
 
 
 bot = commands.Bot(command_prefix=PREFIX, description=DESC)
-#To remove the default help command
-bot.remove_command('help')
+# To remove the default help command
+bot.remove_command( 'help' )
 
 
 # Setup logger
@@ -31,9 +31,9 @@ handler.setFormatter(logging.Formatter('@%(name)s [%(levelname)s] %(asctime)s: %
 logger.addHandler(handler)
 
 
-
 cogs = ['cogs.basic',
-        'cogs.filter',
+        'cogs.censor',
+        'cogs.error',
         'cogs.info',
         'cogs.mod',
         'cogs.warning']
@@ -44,31 +44,21 @@ async def on_ready():
 
     print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
 
-'''
 @bot.event
-async def on_command_error(ctx, error):
+async def on_message_delete():
+    pass
 
-    humanerror = (commands.errors.CommandNotFound, commands.errors.UserInputError)
-    if isinstance(error, humanerror):
-        pass
-    elif isinstance(error, commands.errors.CheckFailure):
-        await bot.say("{} is not allowed to use this command".format(ctx.message.author.mention))
-    elif isinstance(error, commands.errors.DisabledCommand):
-        await bot.say("{} is disabled.".format(ctx.command))
-    elif isinstance(error, commands.errors.MissingRequiredArgument):
-        formatter = commands.formatter.HelpFormatter()
-        await bot.say("{} You are missing required arguments.\n{}"
-                      .format(ctx.message.author.mention, formatter.format_help_for(ctx, ctx.command)[0]))
-'''
 
+def main():
+    for c in cogs:
+        try:
+            bot.load_extension( c )
+            print( f'{c} loaded' )
+        except Exception as e:
+            print( f'Failed to load extension {c}.' )
+
+    bot.run( TOKEN )
 
 # module needed to run a python file
 if __name__ == '__main__':
-    for c in cogs:
-        try:
-            bot.load_extension(c)
-            print(f'{c} loaded')
-        except Exception as e:
-            print(f'Failed to load extension {c}.')
-
-bot.run(TOKEN)
+    main()

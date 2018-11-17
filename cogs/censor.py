@@ -1,4 +1,5 @@
 import discord
+import time
 import cogs.warning
 import re
 
@@ -6,17 +7,25 @@ from discord.ext import commands
 
 
 blacklist = ["FUCK","SHIT","DAMN"]
+INVITE = re.compile(r"(?:https?:\/\/)?(?:www\.)?(?:discord\.(?:gg|io|me|li)|discordapp\.com\/invite)\/([\w|\d|-]+)",
+    flags=re.IGNORECASE)
 
 
-class FilterCog:
+
+class CensorCog:
 
     def __init__(self, bot):
         self.bot = bot
         self.status = False
+        self.mentioned = 0
+
+    async def on_message(self, message):
+        await self.censor_message(message)
+
 
     @commands.command(pass_context=True)
     @commands.has_permissions()
-    async def filter(self, ctx, switched: str):
+    async def censor(self, ctx, switched: str):
         if switched == "on":
             if not self.status:
                 self.status = True
@@ -38,7 +47,7 @@ class FilterCog:
 
     @commands.command(pass_context=True)
     @commands.has_permissions()
-    async def filterstatus(self):
+    async def censorstatus(self):
         await self.bot.say("Filter Status : {}".format(self.status))
 
     @commands.command(pass_context=True)
@@ -49,17 +58,34 @@ class FilterCog:
         await self.bot.say("**__Blacklist Words__**")
         await self.bot.say("```{}```".format(msg))
 
-    # main filters
-    async def on_message(self, message):
-        sentence = message.content.split(" ")
+    async def censor_message(self,message:discord.Message):
+
+        if message.author.server_permissions.administrator:
+            return
+
+        await self.track_mention(message)
+
+        sentence = message.content.split( " " )
         for word in sentence:
             if word.upper() in blacklist and self.status:
                 try:
-                    await self.bot.delete_message(message)
-                    await self.bot.send_message("You aren't allowed to say that in here!")
+                    await self.bot.delete_message( message )
+                    await self.bot.send_message(message.channel, "You aren't allowed to say that in here!" )
                 except discord.errors.NotFound:
                     return
 
+    async def track_mention(self,message:discord.Message):
+        if "@" in message.content and not self.mentioned >4:
+            self.mentioned += 1
+        else:
+            await self.bot.send_message( message.channel, "Stop mention spamming!" )
+            await self.bot.purge_from(message.channel,limit=30,check=lambda message: message.author.id)
+            self.mentioned = 0
+            return
+
+        print(self.mentioned)
+
+
 
 def setup(bot):
-    bot.add_cog(FilterCog(bot))
+    bot.add_cog(CensorCog(bot))

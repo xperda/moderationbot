@@ -14,7 +14,7 @@ class InfoCog:
         aboutembed = discord.Embed(color=discord.Colour.blue())
         commandembed = discord.Embed(title="**__Command List__**", color=discord.Colour.blue())
         modembed = discord.Embed(title="**__Mod Commands__**", color=discord.Colour.blue())
-        warnembed = discord.Embed( title="**__Warn Commands__**", color=discord.Colour.blue() )
+        warnembed = discord.Embed( title="**__Warn Commands__**", color=discord.Colour.blue())
         filterembed = discord.Embed( title="**__Filter Commands__**", color=discord.Colour.blue() )
 
 
@@ -33,14 +33,14 @@ class InfoCog:
         warnembed.add_field( name="warn", value='Adds a warning to the user', inline=True )
         warnembed.add_field( name="unwarn", value='Removes a warning from the user', inline=True )
         warnembed.add_field( name="warnings", value='Displays user current warnings', inline=True )
-        filterembed.add_field( name="filter", value='Turns filter on or off', inline=True )
-        filterembed.add_field( name="filterstatus", value='Displays filter current status', inline=True )
+        filterembed.add_field( name="censor", value='Turns chat filter on or off', inline=True )
+        filterembed.add_field( name="censorstatus", value='Displays filter current status', inline=True )
         filterembed.add_field( name="blacklist", value='Shows a list of banned words on the server', inline=True )
         await self.bot.send_message(ctx.message.channel, embed=aboutembed)
         await self.bot.send_message(ctx.message.channel, embed=commandembed)
-        await self.bot.send_message( ctx.message.channel, embed=modembed)
-        await self.bot.send_message( ctx.message.channel, embed=warnembed)
-        await self.bot.send_message( ctx.message.channel, embed=filterembed)
+        await self.bot.send_message(ctx.message.channel, embed=modembed)
+        await self.bot.send_message(ctx.message.channel, embed=warnembed)
+        await self.bot.send_message(ctx.message.channel, embed=filterembed)
 
     @commands.command(pass_context=True)
     async def whois(self,ctx,user:discord.Member):

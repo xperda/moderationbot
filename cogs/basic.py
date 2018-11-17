@@ -9,10 +9,6 @@ class BasicCog:
     def __init__(self, bot):
         self.bot = bot
 
-    async def on_message_delete(self,message):
-        await self.bot.send_message(message.channel,"Message Deleted")
-
-
     @commands.command(name="ping",pass_context=True)
     async def ping(self,ctx):
         initial_time = time.monotonic()
