@@ -11,7 +11,7 @@ class ConfigLoader:
 
     #config from https://github.com/snoringninja/niftybot-discord/blob/master/resources/config.pyk
     def check_for_bot_config(self):
-        if not self.config:
+        if not os.path.exists(self.config):
             print("Generating ini file...")
             parser = configparser.ConfigParser()
 
