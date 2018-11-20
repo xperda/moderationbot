@@ -28,7 +28,8 @@ class ConfigLoader:
                 parser.write(configfile)
                 print("Generated config.ini")
             return True
-        return False
+        else:
+            return False
 
     def load_config_setting(self, section,var):
         """Load a config setting from the ini."""

@@ -1,7 +1,5 @@
 import discord
 import logging
-import sys
-
 from discord.ext import commands
 
 # util imports
@@ -19,9 +17,10 @@ logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
 ISCONFIG = ConfigLoader().check_for_bot_config()
+print(ISCONFIG)
 if not ISCONFIG:
     print("Cannot find the config.ini file. Restart the bot with ini file")
-    sys.exit(0)
+
 
 PREFIX = ConfigLoader().load_config_setting('Bot', 'command_prefix')
 DESC = ConfigLoader().load_config_setting('Bot', 'description')
