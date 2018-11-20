@@ -9,17 +9,18 @@ class WarningCog:
     def __init__(self, bot):
         self.bot = bot
         self.database = DatabaseHandler()
-    '''
-    @commands.command( name="register", pass_context=True )
-    async def register(self, member: discord.Member):
-        user_id = DatabaseHandler().get_all_rows_db()
-        if member.id == user_id:
-            query = 'INSERT INTO users (id,username,warnings) VALUES (?,?,?)'
-            self.database.insert_into_db( query, (str( member.id ), str( member.name ), 0) )
-            self.bot.say("{} has been registered.".format(member.name))
+
+    async def addWarnings(self, count, user_id):
+        count += 1
+        self.database.update_db( count, user_id )
+
+    async def deleteWarnings(self, count, user_id):
+        if count < 0:
+            pass
         else:
-            self.bot.say( "I can't register this member, {}.".format( member.name ))
-    '''
+            count -= 1
+            self.database.update_db( count, user_id )
+
     @commands.command(name="warning",pass_context=True)
     async def warning(self, ctx, member: discord.Member):
         if member is None:
@@ -104,17 +105,18 @@ class WarningCog:
         else:
             return False
 
+    '''
+       @commands.command( name="register", pass_context=True )
+       async def register(self, member: discord.Member):
+           user_id = DatabaseHandler().get_all_rows_db()
+           if member.id == user_id:
+               query = 'INSERT INTO users (id,username,warnings) VALUES (?,?,?)'
+               self.database.insert_into_db( query, (str( member.id ), str( member.name ), 0) )
+               self.bot.say("{} has been registered.".format(member.name))
+           else:
+               self.bot.say( "I can't register this member, {}.".format( member.name ))
+       '''
 
-    async def addWarnings(self,count,user_id):
-        count+=1
-        self.database.update_db(count,user_id)
-
-    async def deleteWarnings(self,count,user_id):
-        if count < 0:
-            pass
-        else:
-            count-=1
-            self.database.update_db(count,user_id)
 
 
 def setup(bot):
