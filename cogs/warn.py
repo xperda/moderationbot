@@ -9,7 +9,7 @@ class WarningCog:
     def __init__(self, bot):
         self.bot = bot
         self.database = DatabaseHandler()
-
+    '''
     @commands.command( name="register", pass_context=True )
     async def register(self, member: discord.Member):
         user_id = DatabaseHandler().get_all_rows_db()
@@ -19,7 +19,7 @@ class WarningCog:
             self.bot.say("{} has been registered.".format(member.name))
         else:
             self.bot.say( "I can't register this member, {}.".format( member.name ))
-
+    '''
     @commands.command(name="warning",pass_context=True)
     async def warning(self, ctx, member: discord.Member):
         if member is None:
