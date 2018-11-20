@@ -15,3 +15,5 @@ cogs/__pycache__/
 venv/
 #config
 *.ini
+*.db
+*.log
