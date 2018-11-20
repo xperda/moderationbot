@@ -10,7 +10,7 @@ class WarningCog:
         self.bot = bot
         self.database = DatabaseHandler()
 
-    @commands.command( name="warning", pass_context=True )
+    @commands.command( name="register", pass_context=True )
     async def register(self, member: discord.Member):
         user_id = DatabaseHandler().get_all_rows_db()
         if member.id == user_id:
@@ -21,7 +21,7 @@ class WarningCog:
             self.bot.say( "I can't register this member, {}.".format( member.name ))
 
     @commands.command(name="warning",pass_context=True)
-    async def warnings(self, ctx, member: discord.Member):
+    async def warning(self, ctx, member: discord.Member):
         if member is None:
             pass
 

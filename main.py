@@ -6,6 +6,9 @@ from discord.ext import commands
 # util imports
 from utils.config import ConfigLoader
 from utils.database import DatabaseHandler
+from setuptools import setup, find_packages
+
+
 
 # Setup logger
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
@@ -40,7 +43,7 @@ cogs = ['cogs.basic',
 
 @bot.event
 async def on_ready():
-    print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
+    print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id} \nVersion: {discord.__version__}\n')
     await bot.change_presence( game=discord.Game( name='Use ' + PREFIX + 'help for help' ) )
 
 
