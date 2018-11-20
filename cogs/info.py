@@ -1,5 +1,5 @@
 import discord
-import time
+import asyncio
 from discord.ext import commands
 
 
@@ -10,37 +10,25 @@ class InfoCog:
 
     @commands.command(pass_context=True)
     async def help(self, ctx):
-
-        aboutembed = discord.Embed(color=discord.Colour.blue())
         commandembed = discord.Embed(title="**__Command List__**", color=discord.Colour.blue())
-        modembed = discord.Embed(title="**__Mod Commands__**", color=discord.Colour.blue())
-        warnembed = discord.Embed( title="**__Warn Commands__**", color=discord.Colour.blue())
-        filterembed = discord.Embed( title="**__Filter Commands__**", color=discord.Colour.blue() )
 
+        commandembed.add_field(name="ping", value="Returns a pong", inline=False)
+        commandembed.add_field(name="echo", value="Echoes what you typed ", inline=False)
+        commandembed.add_field( name="whois", value="Get a user profile", inline=False)
+        commandembed.add_field( name="__Moderator commands__", value="Commands only available to mods", inline=False )
+        commandembed.add_field(name="kick", value="Kick someone from the server", inline=True)
+        commandembed.add_field(name="ban", value="Ban someone from the server", inline=True)
+        commandembed.add_field(name="banlist", value='Shows a list of banned users', inline=True)
+        commandembed.add_field( name="warn", value='Adds a warning to the user', inline=True)
+        commandembed.add_field( name="unwarn", value='Removes a warning from the user', inline=True )
+        commandembed.add_field( name="warning", value='Displays user current warnings', inline=True )
+        commandembed.add_field( name="__Chat Filter__", value='Filter than censors profanities and mention spam ', inline=False )
+        commandembed.add_field( name="censor", value='Turns chat filter on or off', inline=True )
+        commandembed.add_field( name="censorstatus", value='Displays filter current status', inline=True )
+        commandembed.add_field( name="blacklist", value='Shows a list of banned words on the server', inline=True )
 
-        greeting = "Hello, I am {}".format(self.bot.user.name)
-        desc = "My existence is to assist you in managing your server, I can help you to censor, kick and ban anyone " \
-               "you don't like. It doesn't matter if you want to be a rule your server democratically or with an iron " \
-               "fist. I am always here to help you in your regime."
-
-        aboutembed.add_field(name=greeting, value=desc)
-
-        commandembed.add_field(name="ping", value="Returns a pong", inline=True)
-        commandembed.add_field(name="echo", value="Echoes what you typed ", inline=True)
-        modembed.add_field(name="kick", value="Kick someone from the server", inline=True)
-        modembed.add_field(name="ban", value="Ban someone from the server", inline=True)
-        modembed.add_field(name="banlist", value='Shows a list of banned users', inline=True)
-        warnembed.add_field( name="warn", value='Adds a warning to the user', inline=True )
-        warnembed.add_field( name="unwarn", value='Removes a warning from the user', inline=True )
-        warnembed.add_field( name="warnings", value='Displays user current warnings', inline=True )
-        filterembed.add_field( name="censor", value='Turns chat filter on or off', inline=True )
-        filterembed.add_field( name="censorstatus", value='Displays filter current status', inline=True )
-        filterembed.add_field( name="blacklist", value='Shows a list of banned words on the server', inline=True )
-        await self.bot.send_message(ctx.message.channel, embed=aboutembed)
         await self.bot.send_message(ctx.message.channel, embed=commandembed)
-        await self.bot.send_message(ctx.message.channel, embed=modembed)
-        await self.bot.send_message(ctx.message.channel, embed=warnembed)
-        await self.bot.send_message(ctx.message.channel, embed=filterembed)
+
 
     @commands.command(pass_context=True)
     async def whois(self,ctx,user:discord.Member):
@@ -49,6 +37,7 @@ class InfoCog:
         profile.set_thumbnail(url=user.avatar_url)
         profile.add_field(name="ID",value=user.id,inline=False)
         profile.add_field(name="Date Joined", value=user.joined_at)
+
 
         await self.bot.send_message(ctx.message.channel,embed=profile)
 

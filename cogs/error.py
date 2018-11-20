@@ -1,4 +1,4 @@
-import traceback
+import time
 import discord
 
 from discord.ext import commands
@@ -8,6 +8,7 @@ class ErrorCog:
 
     def __init__(self, bot):
         self.bot = bot
+
 
 
     async def on_command_error(self, error: Exception,ctx:commands.Context):
@@ -20,9 +21,10 @@ class ErrorCog:
             return
 
         channel = ctx.message.channel
-        ignored = (commands.errors.CommandNotFound, commands.errors.UserInputError)
-        if isinstance(error, ignored):
-            pass
+        if isinstance(error, commands.errors.CommandNotFound):
+            await self.bot.send_message( channel," Command not found. Please check with !help")
+        elif isinstance(error, commands.errors.UserInputError):
+            await self.bot.send_message( channel," Command needs valid arguments!")
         elif isinstance(error, commands.errors.NoPrivateMessage):
             await self.bot.send_message(channel,"{} cannot be used in a private message".format(ctx.message.author.mention))
             return
@@ -33,11 +35,11 @@ class ErrorCog:
             if ctx.command.qualified_name == 'tag list':
              await self.bot.send_message(channel,"I cannot find the member your requested.")
              return
-        elif isinstance(error, commands.errors.MissingRequiredArgument):
-            formatter = commands.formatter.HelpFormatter()
-            await self.bot.send_message(("{} You are missing required arguments.\n{}"
-                          .format(ctx.message.author.mention, formatter.format_help_for(ctx, ctx.command)[0])))
+        elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+            await self.bot.send_message(channel,"{} You are missing required arguments".format(ctx.message))
             return
+        else:
+            print(str(error))
 
 
 def setup(bot):
